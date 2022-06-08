@@ -1,18 +1,22 @@
 <?php
 
-function pdo_connect(){
+function pdo_connect()
+{
     $DATABASE_HOST = 'localhost';
     $DATABASE_USER = 'root';
     $DATABASE_PASS = '';
+    //Mengganti password menjadi MYSQL_Secure_password
+    $SECURE_PASSWORD = getenv('MYSQL_SECURE_PASSWORD');
     $DATABASE_NAME = 'simplecrud';
     try {
-    	return new PDO('mysql:host=' . $DATABASE_HOST . ';dbname=' . $DATABASE_NAME, $DATABASE_USER, $DATABASE_PASS);
+        return new PDO('mysql:host=' . $DATABASE_HOST . ';dbname=' . $DATABASE_NAME, $DATABASE_USER, $SECURE_PASSWORD);
     } catch (PDOException $exception) {
-    	die ('Failed to connect to database!');
+        die('Failed to connect to database!');
     }
 }
 
-function style_script(){
+function style_script()
+{
     return '
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
