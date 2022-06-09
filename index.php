@@ -4,6 +4,7 @@ session_start();
 if (!isset($_SESSION['user']) || !isset($_SESSION['token'])) {
     header("location: login.php");
 } else {
+
     $pdo = pdo_connect();
     $stmt = $pdo->prepare('SELECT * FROM contacts');
     $stmt->execute();

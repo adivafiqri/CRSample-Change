@@ -3,43 +3,21 @@
 <html lang="en">
 
 <?php
-//generate CSRF Token
 session_start();
 $_SESSION["token"] = bin2hex(random_bytes(32));
-print_r($_SESSION["token"]);
 
-$notif = null;
-//check validate token
-if (!isset($_SESSION["token"])) {
-    exit("token not set!");
+//ambil nilai variabel error
+
+if (isset($_GET['error'])) {
+    $notif = "Username / Password salah!";
+} else {
+    $notif = null;
 }
-if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['token'])) {
 
-    //melakukan sanitasi html special character
-    $user = htmlspecialchars($_POST['username']);
-    $pass = htmlspecialchars($_POST['password']);
-    //melakukan validasi inputan
 
-    $salt = "XDrBmrW9g2fb";
-    $pdo = pdo_connect();
-    $stmt = $pdo->prepare('SELECT * FROM users WHERE username = ? AND password = ? LIMIT 1');
-    //menggunakan bind param PDO
-    $fungsi_hash = hash('sha256', $pass . $salt);
-    $stmt->bindParam(1, $user);
-    $stmt->bindParam(2, $fungsi_hash);
-    $stmt->execute();
-    $notif = $stmt->rowCount();
-    //validasi form apabila ksong
-    if (empty($user) || empty($pass)) {
-        $notif = "Form harus diisi lengkap!";
-    } elseif ($stmt->rowCount() > 0) {
-        $_SESSION['user'] = $user;
-        header("location: index.php");
-    } else {
-        $notif = "Username atau Password salah !";
-    }
-}
+
 ?>
+
 
 <head>
     <meta charset="UTF-8">
@@ -51,7 +29,7 @@ if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['toke
 
 <body class="text-center">
 
-    <form class="form-signin" method="POST">
+    <form class="form-signin" method="POST" action="proseslogin.php">
         <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
         <label for="inputUsername" class="sr-only">Username</label>
         <input type="username" id="inputUsername" name="username" class="form-control" placeholder="Username" required autofocus>
